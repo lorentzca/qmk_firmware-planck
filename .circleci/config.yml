@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/qmk_firmware
+    docker:
+      - image: edasque/qmk_firmware
+    steps:
+      - environment:
+          keymap: lorentzca
+          keyboard: planck/rev4
+      - persist_to_workspace:
+          root: .
+          paths:
+            - planck_rev4_lorentzca.hex
+
+  publish-github-release:
+    docker:
+      - image: circleci/golang:1.8
+    steps:
+      - attach_workspace:
+          at: ~/qmk_firmware
+      - run:
+          name: Publish Release on GitHub
+          command: |
+            go get github.com/tcnksm/ghr
+             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_SHA1} ~/qmk_firmware/planck_rev4_lorentzca.hex
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+      - publish-github-release:
+          requires:
+            - build
