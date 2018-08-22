@@ -14,6 +14,7 @@ jobs:
             - planck_rev4_lorentzca.hex
 
   publish-github-release:
+    working_directory: ~/qmk_firmware
     docker:
       - image: circleci/golang:1.8
     steps:
