@@ -4,10 +4,10 @@ jobs:
     working_directory: ~/qmk_firmware
     docker:
       - image: edasque/qmk_firmware
+    environment:
+      - keymap: lorentzca
+      - keyboard: planck/rev4
     steps:
-      - environment:
-          keymap: lorentzca
-          keyboard: planck/rev4
       - persist_to_workspace:
           root: .
           paths:
