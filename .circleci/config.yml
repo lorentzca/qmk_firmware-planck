@@ -19,7 +19,7 @@ jobs:
           name: Build keymap
           command: |
             make clean ; make keyboard=planck/rev4 keymap=lorentzca
-            make clean ; make keyboard=planck/rev5 keymap=lorentzca
+            make keyboard=planck/rev5 keymap=lorentzca
       - persist_to_workspace:
           root: ~/qmk
           paths:
