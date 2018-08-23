@@ -44,7 +44,7 @@ workflows:
   version: 2
   main:
     jobs:
-      - build
+      - build:
           filters:
             tags:
               # rev4_v1.0.0
