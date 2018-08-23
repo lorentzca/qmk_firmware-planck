@@ -37,14 +37,24 @@ jobs:
           name: Publish Release on GitHub
           command: |
             go get github.com/tcnksm/ghr
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete rev4$(date +%Y%m%d%H%M%S) ~/qmk/.build/planck_rev4_lorentzca.hex
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete rev5$(date +%Y%m%d%H%M%S) ~/qmk/.build/planck_rev5_lorentzca.hex
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/qmk/.build/planck_rev4_lorentzca.hex
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/qmk/.build/planck_rev5_lorentzca.hex
 
 workflows:
   version: 2
   main:
     jobs:
       - build
+          filters:
+            tags:
+              # rev4_v1.0.0
+              only: /^rev\d+_v\d+\.\d+\.\d+$/
       - publish-github-release:
           requires:
             - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              # rev4_v1.0.0
+              only: /^rev\d+_v\d+\.\d+\.\d+$/
